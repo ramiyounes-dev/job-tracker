@@ -9,7 +9,7 @@ It is a RESTful API that allows users to track their job applications. Users can
 - Pagination for job application records
 - Error handling and validation
 ## Tech Stack
-- Python 3.10+: programming language for building the API
+- Python 3.12+: programming language for building the API
 - FastAPI: web framework for building the API
 - PostgreSQL: database for storing job application data
 - SQLAlchemy: ORM for database interactions
