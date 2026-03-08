@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from app.models import User, Application, Contact
 from app.database import engine, Base
 from contextlib import asynccontextmanager
-from app.routers import auth, applications
+from app.routers import auth, applications, contacts
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,9 +20,9 @@ app = FastAPI(
 
 app.include_router(auth.router,         prefix="/auth",             tags=["auth"])
 app.include_router(applications.router, prefix="/applications",     tags=["applications"])
+app.include_router(contacts.router,     prefix="/applications",     tags=["contacts"])
 
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Job Application Tracker API!"}
-
 
