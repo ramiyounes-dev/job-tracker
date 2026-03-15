@@ -16,6 +16,7 @@ def verify_application_ownership(db, app_id, current_user):
     Application.user_id == current_user.id).first()
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
+    return application
 
 @router.post("/{app_id}/contacts", response_model=ContactResponse)
 def create_contact(app_id: int, contact: ContactCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
@@ -42,11 +43,8 @@ def get_contact(app_id: int, contact_id: int, db: Session = Depends(get_db), cur
 
 @router.get("/{app_id}/contacts", response_model=list[ContactResponse])
 def get_contacts(app_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    verify_application_ownership(db, app_id, current_user)
-    contacts = db.query(Contact).filter(Contact.application_id == app_id).all()
-    if not contacts:
-        return []
-    return [ContactResponse.model_validate(c) for c in contacts]
+    application = verify_application_ownership(db, app_id, current_user)
+    return [ContactResponse.model_validate(c) for c in application.contacts]
 
 @router.put("/{app_id}/contacts/{contact_id}", response_model=ContactResponse)
 def update_contact(app_id: int, contact_id: int, contact_update: ContactUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
